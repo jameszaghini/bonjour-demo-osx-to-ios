@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A4E66EC1AFA40D10093398A"
                BuildableName = "bonjour-demo.app"
-               BlueprintName = "bonjour-demo"
-               ReferencedContainer = "container:bonjour-demo.xcodeproj">
+               BlueprintName = "bonjour-demo-ios"
+               ReferencedContainer = "container:bonjour-demo-ios.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A4E66EC1AFA40D10093398A"
             BuildableName = "bonjour-demo.app"
-            BlueprintName = "bonjour-demo"
-            ReferencedContainer = "container:bonjour-demo.xcodeproj">
+            BlueprintName = "bonjour-demo-ios"
+            ReferencedContainer = "container:bonjour-demo-ios.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -54,8 +54,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A4E66EC1AFA40D10093398A"
             BuildableName = "bonjour-demo.app"
-            BlueprintName = "bonjour-demo"
-            ReferencedContainer = "container:bonjour-demo.xcodeproj">
+            BlueprintName = "bonjour-demo-ios"
+            ReferencedContainer = "container:bonjour-demo-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -73,8 +73,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A4E66EC1AFA40D10093398A"
             BuildableName = "bonjour-demo.app"
-            BlueprintName = "bonjour-demo"
-            ReferencedContainer = "container:bonjour-demo.xcodeproj">
+            BlueprintName = "bonjour-demo-ios"
+            ReferencedContainer = "container:bonjour-demo-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
