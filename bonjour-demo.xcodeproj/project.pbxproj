@@ -19,7 +19,7 @@
 		1A4E67191AFAF4040093398A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "bonjour-demo/AppDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		1A4E671B1AFAF40A0093398A /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "bonjour-demo/ViewController.swift"; sourceTree = SOURCE_ROOT; };
 		1A4E671D1AFAF4100093398A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "bonjour-demo/Info.plist"; sourceTree = SOURCE_ROOT; };
-		1A4E671F1AFAF4180093398A /* bonjour-demo-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "bonjour-demo-bridging-header.h"; path = "bonjour-demo/bonjour-demo-bridging-header.h"; sourceTree = SOURCE_ROOT; };
+		1A4E671F1AFAF4180093398A /* bonjour-demo-ios-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "bonjour-demo-ios-bridging-header.h"; path = "bonjour-demo/bonjour-demo-ios-bridging-header.h"; sourceTree = SOURCE_ROOT; };
 		1A4E67201AFAF4E80093398A /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = "bonjour-demo/GCDAsyncSocket.h"; sourceTree = SOURCE_ROOT; };
 		1A4E67211AFAF4E80093398A /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = "bonjour-demo/GCDAsyncSocket.m"; sourceTree = SOURCE_ROOT; };
 		1A4E67241AFAF5350093398A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "bonjour-demo/Base.lproj/LaunchScreen.xib"; sourceTree = SOURCE_ROOT; };
@@ -58,7 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				1A4E67191AFAF4040093398A /* AppDelegate.swift */,
-				1A4E671F1AFAF4180093398A /* bonjour-demo-bridging-header.h */,
+				1A4E671F1AFAF4180093398A /* bonjour-demo-ios-bridging-header.h */,
 				1A4E67201AFAF4E80093398A /* GCDAsyncSocket.h */,
 				1A4E67211AFAF4E80093398A /* GCDAsyncSocket.m */,
 				1A4E671D1AFAF4100093398A /* Info.plist */,
