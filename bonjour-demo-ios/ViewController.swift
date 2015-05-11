@@ -43,7 +43,6 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
     
     func connectedToDevice() {
         self.connectedToLabel.text = "Connected to " + self.service.name
-
     }
     
     func disconnectedFromDevice() {
@@ -63,13 +62,13 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
     }
     
     @IBAction func sendText() {
-        let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding)
+        if let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding) {
+            var header = data.length
+            let headerData = NSData(bytes: &header, length: sizeof(UInt))
+            self.socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
 
-        var header = data!.length
-        let headerData = NSData(bytes: &header, length: sizeof(UInt))
-        self.socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
-        
-        self.socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
+            self.socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
+        }
     }
     
     /// MARK: NSNetService Delegates

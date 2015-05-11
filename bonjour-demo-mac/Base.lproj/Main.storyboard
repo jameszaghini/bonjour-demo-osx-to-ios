@@ -751,7 +751,7 @@
                                     <font key="font" metaFont="cellTitle"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="sendInfo:" target="XfG-lQ-9wD" id="vw4-cW-ySA"/>
+                                    <action selector="sendData:" target="XfG-lQ-9wD" id="lSF-Fo-RaL"/>
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0j7-Mw-Za5">

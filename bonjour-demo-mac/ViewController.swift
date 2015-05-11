@@ -33,12 +33,6 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
         self.sockets = [:]
         self.startService()
     }
-
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
     
     func parseHeader(data: NSData) -> UInt {
         var out: UInt = 0
@@ -52,17 +46,17 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
         }
     }
     
-    @IBAction func sendInfo(sender: NSButton) {
+    @IBAction func sendData(sender: NSButton) {
         println("send data")
         
-        let data = self.toSendTextField.stringValue.dataUsingEncoding(NSUTF8StringEncoding)
-        let socket = self.getSelectedSocket()
-        
-        var header = data!.length
-        let headerData = NSData(bytes: &header, length: sizeof(UInt))
-        socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
-        
-        socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
+        if let data = self.toSendTextField.stringValue.dataUsingEncoding(NSUTF8StringEncoding) {
+            if let socket = self.getSelectedSocket() {
+                var header = data.length
+                let headerData = NSData(bytes: &header, length: sizeof(UInt))
+                socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
+                socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
+            }
+        }
     }
     
     func startService() {
@@ -203,7 +197,7 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
     
     // MARK: helpers
     
-    func getSelectedSocket() -> GCDAsyncSocket {
+    func getSelectedSocket() -> GCDAsyncSocket? {
         let service = self.devices[self.tableView.selectedRow]
         return self.sockets[service.name]!
     }
