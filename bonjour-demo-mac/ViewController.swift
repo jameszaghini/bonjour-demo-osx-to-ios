@@ -8,8 +8,10 @@
 
 import Cocoa
 
-let headerTag = 1
-let bodyTag = 2
+enum PacketTag: Int {
+    case Header = 1
+    case Body = 2
+}
 
 class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServiceDelegate, GCDAsyncSocketDelegate, NSTableViewDelegate, NSTableViewDataSource {
 
@@ -53,8 +55,8 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
             if let socket = self.getSelectedSocket() {
                 var header = data.length
                 let headerData = NSData(bytes: &header, length: sizeof(UInt))
-                socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
-                socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
+                socket.writeData(headerData, withTimeout: -1.0, tag: PacketTag.Header.rawValue)
+                socket.writeData(data, withTimeout: -1.0, tag: PacketTag.Body.rawValue)
             }
         }
     }
@@ -183,10 +185,10 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
         
             if data.length == sizeof(UInt) {
                 let bodyLength: UInt = self.parseHeader(data)
-                sock.readDataToLength(bodyLength, withTimeout: -1, tag: bodyTag)
+                sock.readDataToLength(bodyLength, withTimeout: -1, tag: PacketTag.Body.rawValue)
             } else {
                 self.handleResponseBody(data)
-                sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: headerTag)
+                sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: PacketTag.Header.rawValue)
             }
         }
     }

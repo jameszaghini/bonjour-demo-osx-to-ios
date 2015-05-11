@@ -7,8 +7,10 @@
 
 import UIKit
 
-let headerTag = 1
-let bodyTag = 2
+enum PacketTag: Int {
+    case Header = 1
+    case Body = 2
+}
 
 class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowserDelegate, GCDAsyncSocketDelegate {
     
@@ -65,9 +67,8 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
         if let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding) {
             var header = data.length
             let headerData = NSData(bytes: &header, length: sizeof(UInt))
-            self.socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
-
-            self.socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
+            self.socket.writeData(headerData, withTimeout: -1.0, tag: PacketTag.Header.rawValue)
+            self.socket.writeData(data, withTimeout: -1.0, tag: PacketTag.Body.rawValue)
         }
     }
     
@@ -103,10 +104,10 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
         
         if data.length == sizeof(UInt) {
             let bodyLength: UInt = self.parseHeader(data)
-            sock.readDataToLength(bodyLength, withTimeout: -1, tag: bodyTag)
+            sock.readDataToLength(bodyLength, withTimeout: -1, tag: PacketTag.Body.rawValue)
         } else {
             self.handleResponseBody(data)
-            sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: headerTag)
+            sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: PacketTag.Header.rawValue)
         }
     }
     
