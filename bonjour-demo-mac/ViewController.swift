@@ -8,6 +8,8 @@
 
 import Cocoa
 
+let headerTag = 1
+let bodyTag = 2
 
 class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServiceDelegate, GCDAsyncSocketDelegate, NSTableViewDelegate, NSTableViewDataSource {
 
@@ -38,13 +40,29 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
         }
     }
     
+    func parseHeader(data: NSData) -> UInt {
+        var out: UInt = 0
+        data.getBytes(&out, length: sizeof(UInt))
+        return out
+    }
+    
+    func handleResponseBody(data: NSData) {
+        if let message = NSString(data: data, encoding: NSUTF8StringEncoding) {
+            self.readLabel.stringValue = message as String
+        }
+    }
+    
     @IBAction func sendInfo(sender: NSButton) {
         println("send data")
+        
         let data = self.toSendTextField.stringValue.dataUsingEncoding(NSUTF8StringEncoding)
-        var mutableData: NSMutableData = data!.mutableCopy() as! NSMutableData
-        mutableData.appendData(GCDAsyncSocket.CRLFData())
         let socket = self.getSelectedSocket()
-        socket.writeData(data, withTimeout: -1.0, tag: 0)
+        
+        var header = data!.length
+        let headerData = NSData(bytes: &header, length: sizeof(UInt))
+        socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
+        
+        socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
     }
     
     func startService() {
@@ -165,16 +183,18 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
     }
     
     func socket(sock: GCDAsyncSocket!, didReadData data: NSData!, withTag tag: Int) {
-        println("socket did read data")
+        println("socket did read data. tag: \(tag)")
         
         if self.getSelectedSocket() == sock {
-            if let message = NSString(data: data, encoding: NSUTF8StringEncoding) {
-                self.readLabel.stringValue = message as String
+        
+            if data.length == sizeof(UInt) {
+                let bodyLength: UInt = self.parseHeader(data)
+                sock.readDataToLength(bodyLength, withTimeout: -1, tag: bodyTag)
+            } else {
+                self.handleResponseBody(data)
+                sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: headerTag)
             }
         }
-//        sock.readDataToData(GCDAsyncSocket.CRLFData(), withTimeout: -1, tag: 0)
-        sock.readDataWithTimeout(-1.0, tag: 0)
-        
     }
     
     func socketDidCloseReadStream(sock: GCDAsyncSocket!) {
@@ -187,9 +207,7 @@ class ViewController: NSViewController, NSNetServiceBrowserDelegate, NSNetServic
         let service = self.devices[self.tableView.selectedRow]
         return self.sockets[service.name]!
     }
-    
 }
-
 
 extension Array {
     mutating func removeObject<U: Equatable>(object: U) {

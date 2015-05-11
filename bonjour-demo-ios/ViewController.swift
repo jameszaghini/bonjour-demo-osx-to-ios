@@ -7,8 +7,11 @@
 
 import UIKit
 
-class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowserDelegate, GCDAsyncSocketDelegate {
+let headerTag = 1
+let bodyTag = 2
 
+class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowserDelegate, GCDAsyncSocketDelegate {
+    
     var service: NSNetService!
     
     var socket: GCDAsyncSocket!
@@ -47,10 +50,26 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
         self.connectedToLabel.text = "Disconnected"
     }
     
-    @IBAction func sendText() {
-        if let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding) {
-            self.socket.writeData(data, withTimeout: -1.0, tag: 0)
+    func parseHeader(data: NSData) -> UInt {
+        var out: UInt = 0
+        data.getBytes(&out, length: sizeof(UInt))
+        return out
+    }
+    
+    func handleResponseBody(data: NSData) {
+        if let message = NSString(data: data, encoding: NSUTF8StringEncoding) {
+            self.receivedTextField.text = message as String
         }
+    }
+    
+    @IBAction func sendText() {
+        let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding)
+
+        var header = data!.length
+        let headerData = NSData(bytes: &header, length: sizeof(UInt))
+        self.socket.writeData(headerData, withTimeout: -1.0, tag: headerTag)
+        
+        self.socket.writeData(data, withTimeout: -1.0, tag: bodyTag)
     }
     
     /// MARK: NSNetService Delegates
@@ -82,8 +101,13 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
     
     func socket(sock: GCDAsyncSocket!, didReadData data: NSData!, withTag tag: Int) {
         println("did read data")
-        if let message = NSString(data: data, encoding: NSUTF8StringEncoding) {
-            self.receivedTextField.text = message as String
+        
+        if data.length == sizeof(UInt) {
+            let bodyLength: UInt = self.parseHeader(data)
+            sock.readDataToLength(bodyLength, withTimeout: -1, tag: bodyTag)
+        } else {
+            self.handleResponseBody(data)
+            sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: headerTag)
         }
     }
     
