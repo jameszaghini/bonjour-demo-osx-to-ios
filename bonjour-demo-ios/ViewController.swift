@@ -7,16 +7,9 @@
 
 import UIKit
 
-enum PacketTag: Int {
-    case Header = 1
-    case Body = 2
-}
-
-class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowserDelegate, GCDAsyncSocketDelegate {
+class ViewController: UIViewController, BonjourControllerDelegate {
     
-    var service: NSNetService!
-    
-    var socket: GCDAsyncSocket!
+    var bonjourController: BonjourController!
     
     @IBOutlet var toSendTextField: UITextField!
     
@@ -28,91 +21,30 @@ class ViewController: UIViewController, NSNetServiceDelegate, NSNetServiceBrowse
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.startBroadCasting()
-    }
-
-    func startBroadCasting() {
-        self.socket = GCDAsyncSocket(delegate: self, delegateQueue: dispatch_get_main_queue())
-        var error: NSError?
-        if self.socket.acceptOnPort(0, error: &error) {
-            self.service = NSNetService(domain: "local.", type: "_probonjore._tcp.", name: UIDevice.currentDevice().name, port: Int32(self.socket.localPort))
-            self.service.delegate = self
-            self.service.publish()
-        } else {
-            println("Unable to create socket. Error \(error)")
-        }
+        self.bonjourController = BonjourController()
+        self.bonjourController.delegate = self
     }
     
-    func connectedToDevice() {
-        self.connectedToLabel.text = "Connected to " + self.service.name
+    func connected() {
+        self.connectedToLabel.text = "Connected to "
     }
     
-    func disconnectedFromDevice() {
+    func disconnected() {
         self.connectedToLabel.text = "Disconnected"
     }
     
-    func parseHeader(data: NSData) -> UInt {
-        var out: UInt = 0
-        data.getBytes(&out, length: sizeof(UInt))
-        return out
+    func handleBody(body: NSString?) {
+        self.receivedTextField.text = body as! String
     }
-    
-    func handleResponseBody(data: NSData) {
-        if let message = NSString(data: data, encoding: NSUTF8StringEncoding) {
-            self.receivedTextField.text = message as String
-        }
+
+    func handleHeader(header: UInt) {
+        
     }
     
     @IBAction func sendText() {
         if let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding) {
-            var header = data.length
-            let headerData = NSData(bytes: &header, length: sizeof(UInt))
-            self.socket.writeData(headerData, withTimeout: -1.0, tag: PacketTag.Header.rawValue)
-            self.socket.writeData(data, withTimeout: -1.0, tag: PacketTag.Body.rawValue)
+            self.bonjourController.send(data)
         }
-    }
-    
-    /// MARK: NSNetService Delegates
-    
-    func netServiceDidPublish(sender: NSNetService) {
-        println("Bonjour service published. domain: \(sender.domain), type: \(sender.type), name: \(sender.name), port: \(sender.port)")
-    }
-    
-    func netService(sender: NSNetService, didNotPublish errorDict: [NSObject : AnyObject]) {
-        println("Unable to create socket. domain: \(sender.domain), type: \(sender.type), name: \(sender.name), port: \(sender.port), Error \(errorDict)")
-    }
-    
-    /// MARK: GCDAsyncSocket Delegates
-
-    func socket(sock: GCDAsyncSocket!, didAcceptNewSocket newSocket: GCDAsyncSocket!) {
-        println("Did accept new socket")
-        self.socket = newSocket
-
-        self.socket.readDataToLength(UInt(sizeof(UInt64)), withTimeout: -1.0, tag: 0)
-        self.connectedToDevice()
-    }
-    
-    func socketDidDisconnect(sock: GCDAsyncSocket!, withError err: NSError!) {
-        println("socket did disconnect: error \(err)")
-        if self.socket == socket {
-            self.disconnectedFromDevice()
-        }
-    }
-    
-    func socket(sock: GCDAsyncSocket!, didReadData data: NSData!, withTag tag: Int) {
-        println("did read data")
-        
-        if data.length == sizeof(UInt) {
-            let bodyLength: UInt = self.parseHeader(data)
-            sock.readDataToLength(bodyLength, withTimeout: -1, tag: PacketTag.Body.rawValue)
-        } else {
-            self.handleResponseBody(data)
-            sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: PacketTag.Header.rawValue)
-        }
-    }
-    
-    func socket(sock: GCDAsyncSocket!, didWriteDataWithTag tag: Int) {
-        println("did write data with tag: \(tag)")
     }
 }
 
