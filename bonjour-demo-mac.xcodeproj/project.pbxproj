@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABC4E081B021338007A2945 /* Array+removeObject.swift */; };
 		1AF39D1D1AFCE59900A5BD43 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF39D1C1AFCE59900A5BD43 /* AppDelegate.swift */; };
 		1AF39D1F1AFCE59900A5BD43 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */; };
 		1AF39D211AFCE59900A5BD43 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AF39D201AFCE59900A5BD43 /* Images.xcassets */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1ABC4E081B021338007A2945 /* Array+removeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+removeObject.swift"; sourceTree = "<group>"; };
 		1AF39D171AFCE59900A5BD43 /* bonjour-demo-mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bonjour-demo-mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF39D1B1AFCE59900A5BD43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AF39D1C1AFCE59900A5BD43 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
 				1AF39D1A1AFCE59900A5BD43 /* Supporting Files */,
 				1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */,
+				1ABC4E081B021338007A2945 /* Array+removeObject.swift */,
 			);
 			path = "bonjour-demo-mac";
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 			files = (
 				1AF39D3C1AFCE5C300A5BD43 /* GCDAsyncSocket.m in Sources */,
 				1AF39D1F1AFCE59900A5BD43 /* ViewController.swift in Sources */,
+				1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */,
 				1AF39D1D1AFCE59900A5BD43 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
