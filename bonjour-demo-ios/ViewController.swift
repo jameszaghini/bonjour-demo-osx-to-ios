@@ -25,8 +25,8 @@ class ViewController: UIViewController, BonjourClientDelegate {
         self.bonjourClient.delegate = self
     }
     
-    func connected() {
-        self.connectedToLabel.text = "Connected to "
+    func connectedTo(socket: GCDAsyncSocket!) {
+        self.connectedToLabel.text = "Connected to " + socket.connectedHost
     }
     
     func disconnected() {

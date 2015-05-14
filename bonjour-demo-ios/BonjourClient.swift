@@ -14,7 +14,7 @@ enum PacketTag: Int {
 }
 
 protocol BonjourClientDelegate {
-    func connected()
+    func connectedTo(socket: GCDAsyncSocket!)
     func disconnected()
     func handleBody(body: NSString?)
 }
@@ -80,7 +80,7 @@ class BonjourClient: NSObject, NSNetServiceDelegate, NSNetServiceBrowserDelegate
         println("Did accept new socket")
         self.socket = newSocket
         self.socket.readDataToLength(UInt(sizeof(UInt64)), withTimeout: -1.0, tag: 0)
-        self.delegate.connected()
+        self.delegate.connectedTo(newSocket)
     }
     
     func socketDidDisconnect(sock: GCDAsyncSocket!, withError err: NSError!) {
@@ -106,6 +106,4 @@ class BonjourClient: NSObject, NSNetServiceDelegate, NSNetServiceBrowserDelegate
     func socket(sock: GCDAsyncSocket!, didWriteDataWithTag tag: Int) {
         println("did write data with tag: \(tag)")
     }
-    
-    
 }
