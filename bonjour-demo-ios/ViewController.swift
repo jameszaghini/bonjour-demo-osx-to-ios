@@ -7,9 +7,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, BonjourControllerDelegate {
+class ViewController: UIViewController, BonjourClientDelegate {
     
-    var bonjourController: BonjourController!
+    var bonjourClient: BonjourClient!
     
     @IBOutlet var toSendTextField: UITextField!
     
@@ -21,8 +21,8 @@ class ViewController: UIViewController, BonjourControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.bonjourController = BonjourController()
-        self.bonjourController.delegate = self
+        self.bonjourClient = BonjourClient()
+        self.bonjourClient.delegate = self
     }
     
     func connected() {
@@ -43,7 +43,7 @@ class ViewController: UIViewController, BonjourControllerDelegate {
     
     @IBAction func sendText() {
         if let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding) {
-            self.bonjourController.send(data)
+            self.bonjourClient.send(data)
         }
     }
 }

@@ -12,7 +12,7 @@
 		1A385A2C1AFE301E00C35C5F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A385A281AFE301E00C35C5F /* ViewController.swift */; };
 		1A385A311AFE302600C35C5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A385A2D1AFE302600C35C5F /* LaunchScreen.xib */; };
 		1A385A321AFE302600C35C5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A385A2F1AFE302600C35C5F /* Main.storyboard */; };
-		1A8436071B01FD1A00BA0556 /* BonjourController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8436061B01FD1A00BA0556 /* BonjourController.swift */; };
+		1A8436071B01FD1A00BA0556 /* BonjourClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8436061B01FD1A00BA0556 /* BonjourClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		1A385A2E1AFE302600C35C5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "bonjour-demo-ios/Base.lproj/LaunchScreen.xib"; sourceTree = SOURCE_ROOT; };
 		1A385A301AFE302600C35C5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "bonjour-demo-ios/Base.lproj/Main.storyboard"; sourceTree = SOURCE_ROOT; };
 		1A4E66ED1AFA40D10093398A /* bonjour-demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bonjour-demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A8436061B01FD1A00BA0556 /* BonjourController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BonjourController.swift; path = "bonjour-demo-ios/BonjourController.swift"; sourceTree = SOURCE_ROOT; };
+		1A8436061B01FD1A00BA0556 /* BonjourClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BonjourClient.swift; path = "bonjour-demo-ios/BonjourClient.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,7 @@
 				1A385A2D1AFE302600C35C5F /* LaunchScreen.xib */,
 				1A385A2F1AFE302600C35C5F /* Main.storyboard */,
 				1A385A281AFE301E00C35C5F /* ViewController.swift */,
-				1A8436061B01FD1A00BA0556 /* BonjourController.swift */,
+				1A8436061B01FD1A00BA0556 /* BonjourClient.swift */,
 			);
 			name = "bonjour-demo-ios";
 			path = "Objects Context Demo";
@@ -150,7 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A385A2C1AFE301E00C35C5F /* ViewController.swift in Sources */,
-				1A8436071B01FD1A00BA0556 /* BonjourController.swift in Sources */,
+				1A8436071B01FD1A00BA0556 /* BonjourClient.swift in Sources */,
 				1A385A2A1AFE301E00C35C5F /* GCDAsyncSocket.m in Sources */,
 				1A385A291AFE301E00C35C5F /* AppDelegate.swift in Sources */,
 			);

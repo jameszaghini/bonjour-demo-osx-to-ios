@@ -13,15 +13,15 @@ enum PacketTag: Int {
     case Body = 2
 }
 
-protocol BonjourControllerDelegate {
+protocol BonjourClientDelegate {
     func connected()
     func disconnected()
     func handleBody(body: NSString?)
 }
 
-class BonjourController: NSObject, NSNetServiceDelegate, NSNetServiceBrowserDelegate, GCDAsyncSocketDelegate {
+class BonjourClient: NSObject, NSNetServiceDelegate, NSNetServiceBrowserDelegate, GCDAsyncSocketDelegate {
    
-    var delegate: BonjourControllerDelegate!
+    var delegate: BonjourClientDelegate!
     
     var service: NSNetService!
     
