@@ -8,24 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		1A385A291AFE301E00C35C5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A385A231AFE301E00C35C5F /* AppDelegate.swift */; };
-		1A385A2A1AFE301E00C35C5F /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A385A261AFE301E00C35C5F /* GCDAsyncSocket.m */; };
 		1A385A2C1AFE301E00C35C5F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A385A281AFE301E00C35C5F /* ViewController.swift */; };
 		1A385A311AFE302600C35C5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1A385A2D1AFE302600C35C5F /* LaunchScreen.xib */; };
 		1A385A321AFE302600C35C5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A385A2F1AFE302600C35C5F /* Main.storyboard */; };
 		1A8436071B01FD1A00BA0556 /* BonjourClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8436061B01FD1A00BA0556 /* BonjourClient.swift */; };
+		1AF475601B04C92400E84914 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF4755F1B04C92400E84914 /* GCDAsyncSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1A385A231AFE301E00C35C5F /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "bonjour-demo-ios/AppDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		1A385A241AFE301E00C35C5F /* bonjour-demo-ios-bridging-header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "bonjour-demo-ios-bridging-header.h"; path = "bonjour-demo-ios/bonjour-demo-ios-bridging-header.h"; sourceTree = SOURCE_ROOT; };
-		1A385A251AFE301E00C35C5F /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = "bonjour-demo-ios/GCDAsyncSocket.h"; sourceTree = SOURCE_ROOT; };
-		1A385A261AFE301E00C35C5F /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = "bonjour-demo-ios/GCDAsyncSocket.m"; sourceTree = SOURCE_ROOT; };
 		1A385A271AFE301E00C35C5F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "bonjour-demo-ios/Info.plist"; sourceTree = SOURCE_ROOT; };
 		1A385A281AFE301E00C35C5F /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "bonjour-demo-ios/ViewController.swift"; sourceTree = SOURCE_ROOT; };
 		1A385A2E1AFE302600C35C5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "bonjour-demo-ios/Base.lproj/LaunchScreen.xib"; sourceTree = SOURCE_ROOT; };
 		1A385A301AFE302600C35C5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "bonjour-demo-ios/Base.lproj/Main.storyboard"; sourceTree = SOURCE_ROOT; };
 		1A4E66ED1AFA40D10093398A /* bonjour-demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bonjour-demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A8436061B01FD1A00BA0556 /* BonjourClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BonjourClient.swift; path = "bonjour-demo-ios/BonjourClient.swift"; sourceTree = SOURCE_ROOT; };
+		1AF4755E1B04C92400E84914 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = SOURCE_ROOT; };
+		1AF4755F1B04C92400E84914 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,13 +61,13 @@
 			children = (
 				1A385A231AFE301E00C35C5F /* AppDelegate.swift */,
 				1A385A241AFE301E00C35C5F /* bonjour-demo-ios-bridging-header.h */,
-				1A385A251AFE301E00C35C5F /* GCDAsyncSocket.h */,
-				1A385A261AFE301E00C35C5F /* GCDAsyncSocket.m */,
+				1A8436061B01FD1A00BA0556 /* BonjourClient.swift */,
+				1AF4755E1B04C92400E84914 /* GCDAsyncSocket.h */,
+				1AF4755F1B04C92400E84914 /* GCDAsyncSocket.m */,
 				1A385A271AFE301E00C35C5F /* Info.plist */,
 				1A385A2D1AFE302600C35C5F /* LaunchScreen.xib */,
 				1A385A2F1AFE302600C35C5F /* Main.storyboard */,
 				1A385A281AFE301E00C35C5F /* ViewController.swift */,
-				1A8436061B01FD1A00BA0556 /* BonjourClient.swift */,
 			);
 			name = "bonjour-demo-ios";
 			path = "Objects Context Demo";
@@ -149,9 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AF475601B04C92400E84914 /* GCDAsyncSocket.m in Sources */,
 				1A385A2C1AFE301E00C35C5F /* ViewController.swift in Sources */,
 				1A8436071B01FD1A00BA0556 /* BonjourClient.swift in Sources */,
-				1A385A2A1AFE301E00C35C5F /* GCDAsyncSocket.m in Sources */,
 				1A385A291AFE301E00C35C5F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
