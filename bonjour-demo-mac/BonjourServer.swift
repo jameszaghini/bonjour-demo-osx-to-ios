@@ -77,7 +77,7 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
     }
     
     func send(data: NSData) {
-        println("send data")
+        print("send data")
         
         if let socket = self.getSelectedSocket() {
             var header = data.length
@@ -97,12 +97,15 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
             socket = GCDAsyncSocket(delegate: self, delegateQueue: dispatch_get_main_queue())
             
             while !connected && Bool(addresses.count) {
-                let address: NSData = addresses[0] as! NSData
-                var error: NSError?
-                if (socket?.connectToAddress(address, error: &error) != nil) {
-                    self.sockets.updateValue(socket!, forKey: service.name)
-                    self.connectedService = service
-                    connected = true
+                let address: NSData = addresses[0] 
+                do {
+                    if (try socket?.connectToAddress(address) != nil) {
+                        self.sockets.updateValue(socket!, forKey: service.name)
+                        self.connectedService = service
+                        connected = true
+                    }
+                } catch {
+                    
                 }
             }
         }
@@ -113,29 +116,29 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
     // MARK: NSNetService Delegates
     
     func netServiceDidResolveAddress(sender: NSNetService) {
-        println("did resolve address \(sender.name)")
+        print("did resolve address \(sender.name)")
         if self.connectToServer(sender) {
-            println("connected to \(sender.name)")
+            print("connected to \(sender.name)")
         }
     }
     
-    func netService(sender: NSNetService, didNotResolve errorDict: [NSObject : AnyObject]) {
-        println("net service did no resolve. errorDict: \(errorDict)")
+    func netService(sender: NSNetService, didNotResolve errorDict: [String : NSNumber]) {
+        print("net service did no resolve. errorDict: \(errorDict)")
     }   
     
     // MARK: GCDAsyncSocket Delegates
     
     func socket(sock: GCDAsyncSocket!, didConnectToHost host: String!, port: UInt16) {
-        println("connected to host \(host), on port \(port)")
+        print("connected to host \(host), on port \(port)")
         sock.readDataToLength(UInt(sizeof(UInt64)), withTimeout: -1.0, tag: 0)
     }
     
     func socketDidDisconnect(sock: GCDAsyncSocket!, withError err: NSError!) {
-        println("socket did disconnect \(sock), error: \(err.userInfo)")
+        print("socket did disconnect \(sock), error: \(err.userInfo)")
     }
     
     func socket(sock: GCDAsyncSocket!, didReadData data: NSData!, withTag tag: Int) {
-        println("socket did read data. tag: \(tag)")
+        print("socket did read data. tag: \(tag)")
         
         if self.getSelectedSocket() == sock {
             
@@ -150,7 +153,7 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
     }
     
     func socketDidCloseReadStream(sock: GCDAsyncSocket!) {
-        println("socket did close read stream")
+        print("socket did close read stream")
     }    
     
     // MARK: NSNetServiceBrowser Delegates
@@ -173,7 +176,7 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
         self.stopBrowsing()
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didNotSearch errorDict: [NSObject : AnyObject]) {
+    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
         self.stopBrowsing()
     }
     

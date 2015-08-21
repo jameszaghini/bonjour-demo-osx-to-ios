@@ -59,7 +59,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?{
         var result = ""
         
-        var columnIdentifier = tableColumn!.identifier
+        let columnIdentifier = tableColumn!.identifier
         if columnIdentifier == "bonjour-device" {
             let device = self.bonjourServer.devices[row]
             result = device.name
@@ -68,7 +68,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     func tableViewSelectionDidChange(notification: NSNotification) {
-        println("notification: \(notification.userInfo)")
+        print("notification: \(notification.userInfo)")
 
         if self.bonjourServer.devices.count > 0 {
             let service = self.bonjourServer.devices[self.tableView.selectedRow]
