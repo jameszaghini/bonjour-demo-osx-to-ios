@@ -34,7 +34,7 @@ class ViewController: UIViewController, BonjourClientDelegate {
     }
     
     func handleBody(body: NSString?) {
-        self.receivedTextField.text = body as! String
+        self.receivedTextField.text = body as? String
     }
 
     func handleHeader(header: UInt) {
@@ -42,7 +42,7 @@ class ViewController: UIViewController, BonjourClientDelegate {
     }
     
     @IBAction func sendText() {
-        if let data = self.toSendTextField.text.dataUsingEncoding(NSUTF8StringEncoding) {
+        if let data = self.toSendTextField.text!.dataUsingEncoding(NSUTF8StringEncoding) {
             self.bonjourClient.send(data)
         }
     }

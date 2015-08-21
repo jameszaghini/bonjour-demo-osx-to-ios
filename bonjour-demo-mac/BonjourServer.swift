@@ -105,7 +105,7 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
                         connected = true
                     }
                 } catch {
-                    
+                    print(error);
                 }
             }
         }
