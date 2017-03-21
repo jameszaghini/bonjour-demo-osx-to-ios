@@ -22,9 +22,7 @@ protocol BonjourClientDelegate {
 class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GCDAsyncSocketDelegate {
    
     var delegate: BonjourClientDelegate!
-    
     var service: NetService!
-    
     var socket: GCDAsyncSocket!
     
     override init() {

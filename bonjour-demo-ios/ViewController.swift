@@ -12,11 +12,8 @@ class ViewController: UIViewController, BonjourClientDelegate {
     var bonjourClient: BonjourClient!
     
     @IBOutlet var toSendTextField: UITextField!
-    
     @IBOutlet var sendButton: UIButton!
-    
     @IBOutlet var receivedTextField: UITextField!
-    
     @IBOutlet var connectedToLabel: UILabel!
     
     override func viewDidLoad() {

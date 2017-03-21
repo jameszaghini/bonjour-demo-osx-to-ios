@@ -13,13 +13,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     var bonjourServer: BonjourServer!
     
     @IBOutlet var tableView: NSTableView!
-    
     @IBOutlet var toSendTextField: NSTextField!
-    
     @IBOutlet var readLabel: NSTextField!
-    
     @IBOutlet var sendButton: NSButton!
-        
+    
     @IBAction func sendData(_ sender: NSButton) {
         if let data = self.toSendTextField.stringValue.data(using: String.Encoding.utf8) {
             self.bonjourServer.send(data)
