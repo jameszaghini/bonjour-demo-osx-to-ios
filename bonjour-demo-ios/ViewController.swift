@@ -25,7 +25,7 @@ class ViewController: UIViewController, BonjourClientDelegate {
         self.bonjourClient.delegate = self
     }
     
-    func connectedTo(socket: GCDAsyncSocket!) {
+    func connectedTo(_ socket: GCDAsyncSocket!) {
         self.connectedToLabel.text = "Connected to " + socket.connectedHost
     }
     
@@ -33,16 +33,16 @@ class ViewController: UIViewController, BonjourClientDelegate {
         self.connectedToLabel.text = "Disconnected"
     }
     
-    func handleBody(body: NSString?) {
+    func handleBody(_ body: NSString?) {
         self.receivedTextField.text = body as? String
     }
 
-    func handleHeader(header: UInt) {
+    func handleHeader(_ header: UInt) {
         
     }
     
     @IBAction func sendText() {
-        if let data = self.toSendTextField.text!.dataUsingEncoding(NSUTF8StringEncoding) {
+        if let data = self.toSendTextField.text!.data(using: String.Encoding.utf8) {
             self.bonjourClient.send(data)
         }
     }
