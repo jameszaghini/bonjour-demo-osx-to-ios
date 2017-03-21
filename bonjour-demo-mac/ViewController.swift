@@ -13,15 +13,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     var bonjourServer: BonjourServer!
     
     @IBOutlet var tableView: NSTableView!
-    
     @IBOutlet var toSendTextField: NSTextField!
-    
     @IBOutlet var readLabel: NSTextField!
-    
     @IBOutlet var sendButton: NSButton!
-        
-    @IBAction func sendData(sender: NSButton) {
-        if let data = self.toSendTextField.stringValue.dataUsingEncoding(NSUTF8StringEncoding) {
+    
+    @IBAction func sendData(_ sender: NSButton) {
+        if let data = self.toSendTextField.stringValue.data(using: String.Encoding.utf8) {
             self.bonjourServer.send(data)
         }
     }
@@ -46,17 +43,17 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
     }
     
-    func handleBody(body: NSString?) {
+    func handleBody(_ body: NSString?) {
         self.readLabel.stringValue = body! as String
     }
     
     // MARK: TableView Delegates
 
-    func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
+    func numberOfRows(in aTableView: NSTableView) -> Int {
         return bonjourServer.devices.count
     }
     
-    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?{
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any?{
         var result = ""
         
         let columnIdentifier = tableColumn!.identifier
@@ -67,7 +64,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         return result
     }
     
-    func tableViewSelectionDidChange(notification: NSNotification) {
+    func tableViewSelectionDidChange(_ notification: Notification) {
         print("notification: \(notification.userInfo)")
 
         if self.bonjourServer.devices.count > 0 {

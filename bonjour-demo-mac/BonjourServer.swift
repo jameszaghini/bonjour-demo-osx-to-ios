@@ -9,26 +9,26 @@
 import Cocoa
 
 enum PacketTag: Int {
-    case Header = 1
-    case Body = 2
+    case header = 1
+    case body = 2
 }
 
 protocol BonjourServerDelegate {
     func connected()
     func disconnected()
-    func handleBody(body: NSString?)
+    func handleBody(_ body: NSString?)
     func didChangeServices()
 }
 
-class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate, GCDAsyncSocketDelegate {
+class BonjourServer: NSObject, NetServiceBrowserDelegate, NetServiceDelegate, GCDAsyncSocketDelegate {
 
     var delegate: BonjourServerDelegate!
     
-    var coServiceBrowser: NSNetServiceBrowser!
+    var coServiceBrowser: NetServiceBrowser!
     
-    var devices: Array<NSNetService>!
+    var devices: Array<NetService>!
     
-    var connectedService: NSNetService!
+    var connectedService: NetService!
     
     var sockets: [String : GCDAsyncSocket]!
     
@@ -39,21 +39,21 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
         self.startService()
     }
     
-    func parseHeader(data: NSData) -> UInt {
+    func parseHeader(_ data: Data) -> UInt {
         var out: UInt = 0
-        data.getBytes(&out, length: sizeof(UInt))
+        (data as NSData).getBytes(&out, length: MemoryLayout<UInt>.size)
         return out
     }
     
-    func handleResponseBody(data: NSData) {
-        if let message = NSString(data: data, encoding: NSUTF8StringEncoding) {
+    func handleResponseBody(_ data: Data) {
+        if let message = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
             self.delegate.handleBody(message)
         }
     }
     
-    func connectTo(service: NSNetService) {
+    func connectTo(_ service: NetService) {
         service.delegate = self
-        service.resolveWithTimeout(15)
+        service.resolve(withTimeout: 15)
     }
     
     // MARK: NSNetServiceBrowser helpers
@@ -68,38 +68,38 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
     
     func startService() {
         if self.devices != nil {
-            self.devices.removeAll(keepCapacity: true)
+            self.devices.removeAll(keepingCapacity: true)
         }
         
-        self.coServiceBrowser = NSNetServiceBrowser()
+        self.coServiceBrowser = NetServiceBrowser()
         self.coServiceBrowser.delegate = self
-        self.coServiceBrowser.searchForServicesOfType("_probonjore._tcp.", inDomain: "local.")
+        self.coServiceBrowser.searchForServices(ofType: "_probonjore._tcp.", inDomain: "local.")
     }
     
-    func send(data: NSData) {
+    func send(_ data: Data) {
         print("send data")
         
         if let socket = self.getSelectedSocket() {
-            var header = data.length
-            let headerData = NSData(bytes: &header, length: sizeof(UInt))
-            socket.writeData(headerData, withTimeout: -1.0, tag: PacketTag.Header.rawValue)
-            socket.writeData(data, withTimeout: -1.0, tag: PacketTag.Body.rawValue)
+            var header = data.count
+            let headerData = Data(bytes: &header, count: MemoryLayout<UInt>.size)
+            socket.write(headerData, withTimeout: -1.0, tag: PacketTag.header.rawValue)
+            socket.write(data, withTimeout: -1.0, tag: PacketTag.body.rawValue)
         }
     }
     
-    func connectToServer(service: NSNetService) -> Bool {
+    func connectToServer(_ service: NetService) -> Bool {
         var connected = false
         
         let addresses: Array = service.addresses!
         var socket = self.sockets[service.name]
         
         if !(socket?.isConnected != nil) {
-            socket = GCDAsyncSocket(delegate: self, delegateQueue: dispatch_get_main_queue())
+            socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
             
-            while !connected && Bool(addresses.count) {
-                let address: NSData = addresses[0] 
+            while !connected && !addresses.isEmpty {
+                let address: Data = addresses[0] 
                 do {
-                    if (try socket?.connectToAddress(address) != nil) {
+                    if (try socket?.connect(toAddress: address) != nil) {
                         self.sockets.updateValue(socket!, forKey: service.name)
                         self.connectedService = service
                         connected = true
@@ -115,68 +115,68 @@ class BonjourServer: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate
     
     // MARK: NSNetService Delegates
     
-    func netServiceDidResolveAddress(sender: NSNetService) {
+    func netServiceDidResolveAddress(_ sender: NetService) {
         print("did resolve address \(sender.name)")
         if self.connectToServer(sender) {
             print("connected to \(sender.name)")
         }
     }
     
-    func netService(sender: NSNetService, didNotResolve errorDict: [String : NSNumber]) {
+    func netService(_ sender: NetService, didNotResolve errorDict: [String : NSNumber]) {
         print("net service did no resolve. errorDict: \(errorDict)")
     }   
     
     // MARK: GCDAsyncSocket Delegates
     
-    func socket(sock: GCDAsyncSocket!, didConnectToHost host: String!, port: UInt16) {
+    func socket(_ sock: GCDAsyncSocket!, didConnectToHost host: String!, port: UInt16) {
         print("connected to host \(host), on port \(port)")
-        sock.readDataToLength(UInt(sizeof(UInt64)), withTimeout: -1.0, tag: 0)
+        sock.readData(toLength: UInt(MemoryLayout<UInt64>.size), withTimeout: -1.0, tag: 0)
     }
     
-    func socketDidDisconnect(sock: GCDAsyncSocket!, withError err: NSError!) {
-        print("socket did disconnect \(sock), error: \(err.userInfo)")
+    func socketDidDisconnect(_ sock: GCDAsyncSocket!, withError err: Error!) {
+        print("socket did disconnect \(sock), error: \(err._userInfo)")
     }
     
-    func socket(sock: GCDAsyncSocket!, didReadData data: NSData!, withTag tag: Int) {
+    func socket(_ sock: GCDAsyncSocket!, didRead data: Data!, withTag tag: Int) {
         print("socket did read data. tag: \(tag)")
         
         if self.getSelectedSocket() == sock {
             
-            if data.length == sizeof(UInt) {
+            if data.count == MemoryLayout<UInt>.size {
                 let bodyLength: UInt = self.parseHeader(data)
-                sock.readDataToLength(bodyLength, withTimeout: -1, tag: PacketTag.Body.rawValue)
+                sock.readData(toLength: bodyLength, withTimeout: -1, tag: PacketTag.body.rawValue)
             } else {
                 self.handleResponseBody(data)
-                sock.readDataToLength(UInt(sizeof(UInt)), withTimeout: -1, tag: PacketTag.Header.rawValue)
+                sock.readData(toLength: UInt(MemoryLayout<UInt>.size), withTimeout: -1, tag: PacketTag.header.rawValue)
             }
         }
     }
     
-    func socketDidCloseReadStream(sock: GCDAsyncSocket!) {
+    func socketDidCloseReadStream(_ sock: GCDAsyncSocket!) {
         print("socket did close read stream")
     }    
     
     // MARK: NSNetServiceBrowser Delegates
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didFindService aNetService: NSNetService, moreComing: Bool) {
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didFind aNetService: NetService, moreComing: Bool) {
         self.devices.append(aNetService)
         if !moreComing {
             self.delegate.didChangeServices()
         }
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didRemoveService aNetService: NSNetService, moreComing: Bool) {
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didRemove aNetService: NetService, moreComing: Bool) {
         self.devices.removeObject(aNetService)
         if !moreComing {
             self.delegate.didChangeServices()            
         }
     }
     
-    func netServiceBrowserDidStopSearch(aNetServiceBrowser: NSNetServiceBrowser) {
+    func netServiceBrowserDidStopSearch(_ aNetServiceBrowser: NetServiceBrowser) {
         self.stopBrowsing()
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
         self.stopBrowsing()
     }
     
