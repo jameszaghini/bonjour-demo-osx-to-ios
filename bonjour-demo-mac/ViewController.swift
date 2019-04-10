@@ -38,7 +38,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     func handleBody(_ body: NSString?) {
-        readLabel.stringValue = body! as String
+        guard let body = body else { return }
+        readLabel.stringValue = body as String
     }
     
     // MARK: TableView Delegates
