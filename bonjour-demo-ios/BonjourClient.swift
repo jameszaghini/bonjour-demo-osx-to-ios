@@ -22,22 +22,23 @@ protocol BonjourClientDelegate {
 class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GCDAsyncSocketDelegate {
    
     var delegate: BonjourClientDelegate!
-    var service: NetService!
-    var socket: GCDAsyncSocket!
+
+    private var service: NetService!
+    private var socket: GCDAsyncSocket!
     
     override init() {
         super.init()
-        self.startBroadCasting()
+        startBroadCasting()
     }
     
     func startBroadCasting() {
-        self.socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
+        socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
         var error: NSError?
         do {
-            try self.socket.accept(onPort: 0)
-            self.service = NetService(domain: "local.", type: "_probonjore._tcp.", name: UIDevice.current.name, port: Int32(self.socket.localPort))
-            self.service.delegate = self
-            self.service.publish()
+            try socket.accept(onPort: 0)
+            service = NetService(domain: "local.", type: "_probonjore._tcp.", name: UIDevice.current.name, port: Int32(socket.localPort))
+            service.delegate = self
+            service.publish()
         } catch let error1 as NSError {
             error = error1
             print("Unable to create socket. Error \(String(describing: error))")
@@ -51,20 +52,17 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
     }
     
     func handleResponseBody(_ data: Data) -> NSString? {
-        if let message = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
-            return message
-        }
-        return nil
+        return NSString(data: data, encoding: String.Encoding.utf8.rawValue)
     }
     
     func send(_ data: Data) {
         var header = data.count
         let headerData = Data(bytes: &header, count: MemoryLayout<UInt>.size)
-        self.socket.write(headerData, withTimeout: -1.0, tag: PacketTag.header.rawValue)
-        self.socket.write(data, withTimeout: -1.0, tag: PacketTag.body.rawValue)
+        socket.write(headerData, withTimeout: -1.0, tag: PacketTag.header.rawValue)
+        socket.write(data, withTimeout: -1.0, tag: PacketTag.body.rawValue)
     }
     
-    /// MARK: NSNetService Delegates
+    // MARK: - NSNetService Delegates
     
     func netServiceDidPublish(_ sender: NetService) {
         print("Bonjour service published. domain: \(sender.domain), type: \(sender.type), name: \(sender.name), port: \(sender.port)")
@@ -74,19 +72,19 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
         print("Unable to create socket. domain: \(sender.domain), type: \(sender.type), name: \(sender.name), port: \(sender.port), Error \(errorDict)")
     }
     
-    /// MARK: GCDAsyncSocket Delegates
+    // MARK: - GCDAsyncSocket Delegates
     
     func socket(_ sock: GCDAsyncSocket!, didAcceptNewSocket newSocket: GCDAsyncSocket!) {
         print("Did accept new socket")
-        self.socket = newSocket
-        self.socket.readData(toLength: UInt(MemoryLayout<UInt64>.size), withTimeout: -1.0, tag: 0)
-        self.delegate.connectedTo(newSocket)
+        socket = newSocket
+        socket.readData(toLength: UInt(MemoryLayout<UInt64>.size), withTimeout: -1.0, tag: 0)
+        delegate.connectedTo(newSocket)
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket!, withError err: Error!) {
         print("socket did disconnect: error \(String(describing: err))")
-        if self.socket == socket {
-            self.delegate.disconnected()
+        if socket == socket {
+            delegate.disconnected()
         }
     }
     
@@ -94,11 +92,11 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
         print("did read data")
         
         if data.count == MemoryLayout<UInt>.size {
-            let bodyLength: UInt = self.parseHeader(data)
+            let bodyLength: UInt = parseHeader(data)
             sock.readData(toLength: bodyLength, withTimeout: -1, tag: PacketTag.body.rawValue)
         } else {
-            let body = self.handleResponseBody(data)
-            self.delegate.handleBody(body)
+            let body = handleResponseBody(data)
+            delegate.handleBody(body)
             sock.readData(toLength: UInt(MemoryLayout<UInt>.size), withTimeout: -1, tag: PacketTag.header.rawValue)
         }
     }

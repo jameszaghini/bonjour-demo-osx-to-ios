@@ -9,29 +9,29 @@ import UIKit
 
 class ViewController: UIViewController, BonjourClientDelegate {
     
-    var bonjourClient: BonjourClient!
+    private var bonjourClient: BonjourClient!
     
-    @IBOutlet var toSendTextField: UITextField!
-    @IBOutlet var sendButton: UIButton!
-    @IBOutlet var receivedTextField: UITextField!
-    @IBOutlet var connectedToLabel: UILabel!
+    @IBOutlet private var toSendTextField: UITextField!
+    @IBOutlet private var sendButton: UIButton!
+    @IBOutlet private var receivedTextField: UITextField!
+    @IBOutlet private var connectedToLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.bonjourClient = BonjourClient()
-        self.bonjourClient.delegate = self
+        bonjourClient = BonjourClient()
+        bonjourClient.delegate = self
     }
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
-        self.connectedToLabel.text = "Connected to " + socket.connectedHost
+        connectedToLabel.text = "Connected to " + socket.connectedHost
     }
     
     func disconnected() {
-        self.connectedToLabel.text = "Disconnected"
+        connectedToLabel.text = "Disconnected"
     }
     
     func handleBody(_ body: NSString?) {
-        self.receivedTextField.text = body as String?
+        receivedTextField.text = body as String?
     }
 
     func handleHeader(_ header: UInt) {
@@ -39,8 +39,8 @@ class ViewController: UIViewController, BonjourClientDelegate {
     }
     
     @IBAction func sendText() {
-        if let data = self.toSendTextField.text!.data(using: String.Encoding.utf8) {
-            self.bonjourClient.send(data)
+        if let data = toSendTextField.text!.data(using: String.Encoding.utf8) {
+            bonjourClient.send(data)
         }
     }
 }
