@@ -5,7 +5,7 @@ This repository has two XCode projects
 * An OS X Bonjour server that can send/recieve data
 * An iOS Bonjour client that can send/recieve data
 
-You'll need Xcode 10.1 with Swift 4 or greater
+You'll need Xcode 10.2 with Swift 5 or greater
 
 PS... I wrote this as proof of concept & to learn Swift years ago. If you're going to use it in production, use it as a reference and rewrite it yourself!
 
