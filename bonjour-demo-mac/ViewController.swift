@@ -19,14 +19,14 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.bonjourServer = BonjourServer()
-        self.bonjourServer.delegate = self
+        bonjourServer = BonjourServer()
+        bonjourServer.delegate = self
     }
     
     // MARK: Bonjour server delegates
     
     func didChangeServices() {
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     func connected() {
@@ -38,7 +38,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     func handleBody(_ body: NSString?) {
-        self.readLabel.stringValue = body! as String
+        readLabel.stringValue = body! as String
     }
     
     // MARK: TableView Delegates
@@ -52,7 +52,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 
         let columnIdentifier = tableColumn!.identifier.rawValue
         if columnIdentifier == "bonjour-device" {
-            let device = self.bonjourServer.devices[row]
+            let device = bonjourServer.devices[row]
             result = device.name
         }
         return result
@@ -61,17 +61,17 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     func tableViewSelectionDidChange(_ notification: Notification) {
         print("notification: \(String(describing: notification.userInfo))")
 
-        if self.bonjourServer.devices.count > 0 {
-            let service = self.bonjourServer.devices[self.tableView.selectedRow]
-            self.bonjourServer.connectTo(service)
+        if bonjourServer.devices.count > 0 {
+            let service = bonjourServer.devices[tableView.selectedRow]
+            bonjourServer.connectTo(service)
         }
     }
 
     // MARK: - Private
 
     @IBAction private func sendData(_ sender: NSButton) {
-        if let data = self.toSendTextField.stringValue.data(using: String.Encoding.utf8) {
-            self.bonjourServer.send(data)
+        if let data = toSendTextField.stringValue.data(using: String.Encoding.utf8) {
+            bonjourServer.send(data)
         }
     }
 }
