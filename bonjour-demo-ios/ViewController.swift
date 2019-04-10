@@ -31,7 +31,7 @@ class ViewController: UIViewController, BonjourClientDelegate {
     }
     
     func handleBody(_ body: NSString?) {
-        self.receivedTextField.text = body as? String
+        self.receivedTextField.text = body as String?
     }
 
     func handleHeader(_ header: UInt) {

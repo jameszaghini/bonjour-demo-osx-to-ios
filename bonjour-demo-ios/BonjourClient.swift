@@ -40,7 +40,7 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
             self.service.publish()
         } catch let error1 as NSError {
             error = error1
-            print("Unable to create socket. Error \(error)")
+            print("Unable to create socket. Error \(String(describing: error))")
         }
     }
     
@@ -84,7 +84,7 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket!, withError err: Error!) {
-        print("socket did disconnect: error \(err)")
+        print("socket did disconnect: error \(String(describing: err))")
         if self.socket == socket {
             self.delegate.disconnected()
         }

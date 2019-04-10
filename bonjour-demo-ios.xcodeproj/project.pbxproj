@@ -113,7 +113,7 @@
 				TargetAttributes = {
 					1A4E66EC1AFA40D10093398A = {
 						CreatedOnToolsVersion = 6.3;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -277,7 +277,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zaghini.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "bonjour-demo";
 				SWIFT_OBJC_BRIDGING_HEADER = "bonjour-demo-ios/bonjour-demo-ios-bridging-header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -290,7 +291,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zaghini.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "bonjour-demo";
 				SWIFT_OBJC_BRIDGING_HEADER = "bonjour-demo-ios/bonjour-demo-ios-bridging-header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
