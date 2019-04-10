@@ -129,12 +129,12 @@ class BonjourServer: NSObject, NetServiceBrowserDelegate, NetServiceDelegate, GC
     // MARK: GCDAsyncSocket Delegates
     
     func socket(_ sock: GCDAsyncSocket!, didConnectToHost host: String!, port: UInt16) {
-        print("connected to host \(host), on port \(port)")
+        print("connected to host \(String(describing: host)), on port \(port)")
         sock.readData(toLength: UInt(MemoryLayout<UInt64>.size), withTimeout: -1.0, tag: 0)
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket!, withError err: Error!) {
-        print("socket did disconnect \(sock), error: \(err._userInfo)")
+        print("socket did disconnect \(String(describing: sock)), error: \(String(describing: err._userInfo))")
     }
     
     func socket(_ sock: GCDAsyncSocket!, didRead data: Data!, withTag tag: Int) {
