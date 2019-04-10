@@ -62,7 +62,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     func tableViewSelectionDidChange(_ notification: Notification) {
         print("notification: \(String(describing: notification.userInfo))")
 
-        if bonjourServer.devices.count > 0 {
+        if !bonjourServer.devices.isEmpty {
             let service = bonjourServer.devices[tableView.selectedRow]
             bonjourServer.connectTo(service)
         }
