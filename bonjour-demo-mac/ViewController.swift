@@ -10,19 +10,13 @@ import Cocoa
 
 class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, BonjourServerDelegate {
     
-    var bonjourServer: BonjourServer!
+    private var bonjourServer: BonjourServer!
     
-    @IBOutlet var tableView: NSTableView!
-    @IBOutlet var toSendTextField: NSTextField!
-    @IBOutlet var readLabel: NSTextField!
-    @IBOutlet var sendButton: NSButton!
-    
-    @IBAction func sendData(_ sender: NSButton) {
-        if let data = self.toSendTextField.stringValue.data(using: String.Encoding.utf8) {
-            self.bonjourServer.send(data)
-        }
-    }
-    
+    @IBOutlet private var tableView: NSTableView!
+    @IBOutlet private var toSendTextField: NSTextField!
+    @IBOutlet private var readLabel: NSTextField!
+    @IBOutlet private var sendButton: NSButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.bonjourServer = BonjourServer()
@@ -70,6 +64,14 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         if self.bonjourServer.devices.count > 0 {
             let service = self.bonjourServer.devices[self.tableView.selectedRow]
             self.bonjourServer.connectTo(service)
+        }
+    }
+
+    // MARK: - Private
+
+    @IBAction private func sendData(_ sender: NSButton) {
+        if let data = self.toSendTextField.stringValue.data(using: String.Encoding.utf8) {
+            self.bonjourServer.send(data)
         }
     }
 }
