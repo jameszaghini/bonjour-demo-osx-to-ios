@@ -23,7 +23,7 @@ class ViewController: UIViewController, BonjourClientDelegate {
     }
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
-        connectedToLabel.text = "Connected to " + socket.connectedHost
+        connectedToLabel.text = "Connected to " + (socket.connectedHost ?? "-")
     }
     
     func disconnected() {
