@@ -74,21 +74,21 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
     
     // MARK: - GCDAsyncSocket Delegates
     
-    func socket(_ sock: GCDAsyncSocket!, didAcceptNewSocket newSocket: GCDAsyncSocket!) {
+    func socket(_ sock: GCDAsyncSocket, didAcceptNewSocket newSocket: GCDAsyncSocket) {
         print("Did accept new socket")
         socket = newSocket
         socket.readData(toLength: UInt(MemoryLayout<UInt64>.size), withTimeout: -1.0, tag: 0)
         delegate.connectedTo(newSocket)
     }
     
-    func socketDidDisconnect(_ sock: GCDAsyncSocket!, withError err: Error!) {
+    func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socket did disconnect: error \(String(describing: err))")
         if socket == socket {
             delegate.disconnected()
         }
     }
     
-    func socket(_ sock: GCDAsyncSocket!, didRead data: Data!, withTag tag: Int) {
+    func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         print("did read data")
         
         if data.count == MemoryLayout<UInt>.size {
@@ -101,7 +101,7 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
         }
     }
     
-    func socket(_ sock: GCDAsyncSocket!, didWriteDataWithTag tag: Int) {
+    func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
         print("did write data with tag: \(tag)")
     }
 }
